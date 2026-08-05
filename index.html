@@ -1664,7 +1664,7 @@ n-bottom: 14px;
 
 
 <style id="stories-in-science-consistency-retrofit">
-:root { --lesson-content-max: 800px; --shell-gap: 16px; }
+:root { --lesson-content-max: 900px; --shell-gap: 16px; }
 html { scroll-padding-top: 92px; }
 body { overflow-x: hidden; }
 body.ui-locked { overflow: hidden; }
@@ -1864,6 +1864,11 @@ button { min-height: 44px; }
   background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
   border-bottom: none;
   box-shadow: 0 2px 12px rgba(0,0,0,.18);
+  /* Inset the header's content to align with the lesson content column
+     below it (matches Alien Alert's app-header__inner), while keeping
+     this element's colored background full-bleed. */
+  padding-left: max(16px, calc((100% - var(--lesson-content-max)) / 2 + 16px));
+  padding-right: max(16px, calc((100% - var(--lesson-content-max)) / 2 + 16px));
 }
 .resume-bar .brand .brand-pill { background: var(--yellow); color: var(--gray-800); }
 .resume-bar .brand .brand-text .brand-series { color: rgba(255,255,255,.78); }
@@ -1885,7 +1890,7 @@ button { min-height: 44px; }
 .decision-tracker-path {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   background: transparent;
   border: none;
   box-shadow: none;
@@ -1895,10 +1900,12 @@ button { min-height: 44px; }
 .tracker-step {
   flex: 1 1 150px;
   min-width: 150px;
-  border: 1px solid var(--gray-200);
+  align-items: flex-start;
+  gap: 9px;
+  border: 2px solid var(--gray-200);
   border-radius: var(--radius);
   background: var(--white);
-  padding: 12px 14px;
+  padding: 8px 9px;
   box-shadow: var(--shadow-sm);
 }
 .tracker-step[aria-current="step"] {
@@ -1906,14 +1913,36 @@ button { min-height: 44px; }
   background: var(--yellow-light);
   box-shadow: 0 0 0 3px rgba(255,198,39,.18);
 }
+.tracker-step-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 0.72rem;
+}
 .tracker-step-icon.current { background: var(--yellow); color: var(--gray-800); box-shadow: none; }
-.tracker-step-label { color: var(--gray-500); }
+.tracker-step-label {
+  color: var(--gray-500);
+  font-size: 0.6rem;
+  letter-spacing: 0.09em;
+  line-height: 1.2;
+}
 .tracker-step[aria-current="step"] .tracker-step-label { color: var(--green-dark); }
-.tracker-step-value { font-style: italic; font-weight: 500; color: var(--gray-600); }
+.tracker-step-value {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--gray-600);
+  font-size: 0.68rem;
+  line-height: 1.2;
+  margin-top: 2px;
+}
 
 @media (max-width: 620px) {
   .tracker-step { flex: 1 1 100%; }
+  .resume-bar { padding-left: 16px; padding-right: 16px; }
 }
+
+/* Header stays visible from the launch screen; only its buttons hide
+   until the student leaves the launch page (matches Alien Alert). */
+.launch-view .resume-bar .actions { display: none; }
 </style>
 
 </head>
@@ -4756,7 +4785,10 @@ function renderScreen(screenId) {
   document.body.classList.toggle('launch-view', isLaunch);
   const header = document.getElementById('activeLessonHeader');
   const tracker = document.getElementById('decisionTracker');
-  if (header) header.hidden = isLaunch;
+  // Header (badge + title) stays visible from the launch screen onward,
+  // matching the Alien Alert pattern; only its action buttons and the
+  // progress tracker are held back until the student leaves the launch page.
+  if (header) header.hidden = false;
   if (tracker) tracker.hidden = isLaunch;
   renderTracker();
 }
