@@ -1943,6 +1943,23 @@ button { min-height: 44px; }
 /* Header stays visible from the launch screen; only its buttons hide
    until the student leaves the launch page (matches Alien Alert). */
 .launch-view .resume-bar .actions { display: none; }
+
+/* Narrative images were rendering full-card-width, which felt oversized
+   next to the other lessons. Scaled to ~60% (a 40% reduction), centered,
+   with a mobile floor so they don't shrink to postage-stamp size on small
+   screens. Excludes the cover/hero image and the small badge images,
+   which already have their own intentional sizing, and doesn't touch the
+   Forest Glen map / hotspot interactives, which use separate classes. */
+.lesson-image:not(.lesson-hero-image):not(.lesson-image-small) {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 480px) {
+  .lesson-image:not(.lesson-hero-image):not(.lesson-image-small) {
+    width: 85%;
+  }
+}
 </style>
 
 </head>
